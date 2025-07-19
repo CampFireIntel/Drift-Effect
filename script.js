@@ -67,3 +67,4 @@ function initEmbers(count = 200) {
 
 initEmbers();
 animate();
+ctx.fillStyle = 'red'; ctx.fillRect(10, 10, 20, 20);
