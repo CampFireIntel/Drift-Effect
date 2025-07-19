@@ -11,9 +11,9 @@ body {
 }
 
 .background-logo {
-    background: url('logo.png');
-    background-size: contain;
-    opacity: 0.03;
+    background: url('logo.png') no-repeat center center;
+    background-size: 60%;
+    opacity: 0.06;
     position: absolute;
     top: 0;
     left: 0;
@@ -21,6 +21,8 @@ body {
     bottom: 0;
     pointer-events: none;
     z-index: 0;
+}
+
 }
 
 .content {
