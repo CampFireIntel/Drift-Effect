@@ -1,3 +1,28 @@
+const canvas = document.getElementById('emberCanvas');
+const ctx = canvas.getContext('2d');
 
-// Drift effect placeholder - customize if needed
-console.log("Drift Effect active");
+canvas.style.position = 'fixed';
+canvas.style.top = '0';
+canvas.style.left = '0';
+canvas.style.width = '100%';
+canvas.style.height = '100%';
+canvas.style.zIndex = '0';
+canvas.style.pointerEvents = 'none';
+
+let embers = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function createEmber() {
+  return {
+    x: Math.random() * canvas.width,
+    y: canvas.height + Math.random() * 100,
+    radius: Math.random() * 2 + 1,
+    speed: Math.random() * 0.5 + 0.2,
+    alpha: Math.ran
