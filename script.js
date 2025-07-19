@@ -6,7 +6,7 @@ canvas.style.top = '0';
 canvas.style.left = '0';
 canvas.style.width = '100%';
 canvas.style.height = '100%';
-canvas.style.zIndex = '0';
+canvas.style.zIndex = '1';
 canvas.style.pointerEvents = 'none';
 
 let embers = [];
@@ -25,46 +25,21 @@ function createEmber() {
     y: canvas.height + Math.random() * 100,
     radius: Math.random() * 2 + 1,
     speed: Math.random() * 0.5 + 0.2,
-    alpha: Math.random() * 0.5 + 0.1,
-    wind: Math.random() * 0.2 - 0.1
+    alpha: Math.random() * 0.5 + 0.3
   };
 }
 
+function drawEmber(ember) {
+  ctx.beginPath();
+  ctx.arc(ember.x, ember.y, ember.radius, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(249, 115, 22, ${ember.alpha})`; // Ember orange
+  ctx.fill();
+}
+
 function updateEmbers() {
-  for (let i = 0; i < embers.length; i++) {
-    const ember = embers[i];
-    ember.y -= ember.speed;
-    ember.x += ember.wind;
-
-    if (ember.y < -10 || ember.x < -10 || ember.x > canvas.width + 10) {
-      embers[i] = createEmber();
-    }
-  }
-}
-
-function drawEmbers() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (const ember of embers) {
-    ctx.beginPath();
-    ctx.arc(ember.x, ember.y, ember.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255, 115, 0, ${ember.alpha})`;
-    ctx.fill();
-  }
-}
-
-function animate() {
-  updateEmbers();
-  drawEmbers();
-  requestAnimationFrame(animate);
-}
-
-function initEmbers(count = 200) {
-  embers = [];
-  for (let i = 0; i < count; i++) {
+  if (embers.length < 100) {
     embers.push(createEmber());
   }
-}
 
-initEmbers();
-animate();
-ctx.fillStyle = 'red'; ctx.fillRect(10, 10, 20, 20);
+  for (let i = embers.length - 1; i >= 0; i--) {
+    embers[i].y -=
