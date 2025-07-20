@@ -37,9 +37,9 @@ body {
 
 .text-container {
   position: absolute;
-  top: 70%;
+  top: 93%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -100%);
   text-align: center;
   color: #f97316;
   z-index: 1;
