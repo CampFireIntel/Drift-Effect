@@ -10,8 +10,8 @@ function Ember(x, y) {
   this.x = x;
   this.y = y;
   this.size = Math.random() * 3 + 1;
-  this.speedX = Math.random() * 2 - 1;
-  this.speedY = Math.random() * 2 - 1;
+  this.speedX = (Math.random() - 0.5) * 4;  // Swirl speed adjustment
+  this.speedY = (Math.random() - 0.5) * 4;  // Swirl speed adjustment
   this.opacity = Math.random() * 0.5 + 0.2;
 }
 
@@ -27,9 +27,13 @@ function updateEmbers() {
   for (let i = 0; i < embers.length; i++) {
     embers[i].x += embers[i].speedX;
     embers[i].y += embers[i].speedY;
+
+    embers[i].speedX *= 0.98; // Slow down over time to give a swirling effect
+    embers[i].speedY *= 0.98; // Slow down over time to give a swirling effect
+
     embers[i].size *= 0.98;
     embers[i].opacity *= 0.98;
-    
+
     if (embers[i].size <= 0.1 || embers[i].opacity <= 0.05) {
       embers.splice(i, 1);
       i--;
