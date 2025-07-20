@@ -20,29 +20,39 @@ body {
   z-index: -1;
 }
 
-/* === Logo & Text === */
+/* === Logo === */
 .logo-container {
   position: absolute;
-  top: 55%; /* Adjust this to 60% or 55% if you want it higher */
+  top: 45%; /* Adjust logo vertical position here */
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
-  color: #f97316;
+  z-index: 1;
 }
 
 .logo {
   width: 300px;
   max-width: 80%;
-  height: 100%;
+  height: auto;
   display: block;
   margin: 0 auto;
   filter: drop-shadow(0 0 20px #f97316aa);
 }
 
+/* === Text (Title + Subtitle) === */
+.text-container {
+  position: absolute;
+  top: 70%;  /* Adjust this to move text higher/lower */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #f97316;
+  z-index: 1;
+}
+
 .title {
   font-size: 2rem;
   font-weight: bold;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .subtitle {
