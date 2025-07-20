@@ -1,58 +1,77 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #0d0d0d;
-  color: #f97316;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
+const canvas = document.getElementById("emberCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+let mouse = {
+  x: canvas.width / 2,
+  y: canvas.height / 2
+};
+
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+const emberCount = 100;
+const embers = [];
+
+class Ember {
+  constructor() {
+    this.reset(true);
+  }
+
+  reset(first = false) {
+    this.x = Math.random() * canvas.width;
+    this.y = first ? Math.random() * canvas.height : canvas.height + 10;
+    this.radius = Math.random() * 2 + 1;
+    this.speedY = Math.random() * -1.5 - 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.5;
+    this.alpha = Math.random() * 0.5 + 0.3;
+    this.color = `rgba(255, 120, 0, ${this.alpha})`;
+  }
+
+  update() {
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const force = Math.min(100 / dist, 1);
+
+    this.x += this.speedX + (dx / dist) * force * 0.5;
+    this.y += this.speedY + (dy / dist) * force * 0.02;
+
+    if (this.y < -10 || this.x < -50 || this.x > canvas.width + 50) {
+      this.reset();
+    }
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = "orange";
+    ctx.shadowBlur = 10;
+    ctx.fill();
+  }
 }
 
-#emberCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+for (let i = 0; i < emberCount; i++) {
+  embers.push(new Ember());
 }
 
-.logo-container {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  embers.forEach((ember) => {
+    ember.update();
+    ember.draw();
+  });
+  requestAnimationFrame(animate);
 }
 
-.logo {
-  width: 400px;
-  max-width: 90%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  filter: drop-shadow(0 0 25px #f97316aa);
-}
-
-.text-container {
-  position: absolute;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #f97316;
-  z-index: 1;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: 0;
-}
-
-.subtitle {
-  font-size: 1rem;
-  opacity: 0.7;
-  margin-top: 0.5rem;
-}
+animate();
