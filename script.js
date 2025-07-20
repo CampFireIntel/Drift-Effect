@@ -1,49 +1,56 @@
 const canvas = document.getElementById('emberCanvas');
 const ctx = canvas.getContext('2d');
 
+let embers = [];
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-let embers = [];
-
-function Ember() {
-  this.x = Math.random() * canvas.width;
-  this.y = canvas.height + Math.random() * 100;
-  this.radius = Math.random() * 2 + 1;
-  this.speedY = Math.random() * 1.5 + 0.5;
-  this.color = `hsl(${Math.random() * 60 + 20}, 100%, ${Math.random() * 30 + 50}%)`;
-  this.alpha = Math.random() * 0.6 + 0.2;
+function Ember(x, y) {
+  this.x = x;
+  this.y = y;
+  this.size = Math.random() * 3 + 1;
+  this.speedX = Math.random() * 2 - 1;
+  this.speedY = Math.random() * 2 - 1;
+  this.opacity = Math.random() * 0.5 + 0.2;
 }
 
-function createEmbers(count) {
-  for (let i = 0; i < count; i++) {
-    embers.push(new Ember());
+function createEmbers(e) {
+  const xPos = e.x;
+  const yPos = e.y;
+  for (let i = 0; i < 5; i++) {
+    embers.push(new Ember(xPos, yPos));
   }
 }
 
-function drawEmbers() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.globalCompositeOperation = 'lighter';
-
+function updateEmbers() {
   for (let i = 0; i < embers.length; i++) {
-    let e = embers[i];
-    ctx.beginPath();
-    ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
-    ctx.fillStyle = e.color;
-    ctx.globalAlpha = e.alpha;
-    ctx.fill();
-    e.y -= e.speedY;
-    if (e.y < -10) embers[i] = new Ember();
+    embers[i].x += embers[i].speedX;
+    embers[i].y += embers[i].speedY;
+    embers[i].size *= 0.98;
+    embers[i].opacity *= 0.98;
+    
+    if (embers[i].size <= 0.1 || embers[i].opacity <= 0.05) {
+      embers.splice(i, 1);
+      i--;
+    }
   }
-
-  ctx.globalAlpha = 1.0;
-  requestAnimationFrame(drawEmbers);
 }
 
-createEmbers(150);
-drawEmbers();
+function drawEmber(ember) {
+  ctx.beginPath();
+  ctx.arc(ember.x, ember.y, ember.size, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(255, 165, 0, ${ember.opacity})`;
+  ctx.fill();
+}
+
+canvas.addEventListener('mousemove', createEmbers);
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  updateEmbers();
+  embers.forEach(drawEmber);
+  requestAnimationFrame(animate);
+}
+
+animate();
