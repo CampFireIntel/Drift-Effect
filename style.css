@@ -30,8 +30,8 @@ body {
 }
 
 .logo {
-  width: 900px;
-  max-width: 500%;
+  width: 800px;
+  max-width: 400%;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -41,7 +41,7 @@ body {
 /* === Text (Title + Subtitle) === */
 .text-container {
   position: absolute;
-  top: 70%;  /* Adjust this to move text higher/lower */
+  top: 75%;  /* Adjust this to move text higher/lower */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
