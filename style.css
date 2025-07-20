@@ -23,7 +23,7 @@ body {
 /* === Logo & Text === */
 .logo-container {
   position: absolute;
-  top: 65%; /* Adjust this to 60% or 55% if you want it higher */
+  top: 55%; /* Adjust this to 60% or 55% if you want it higher */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
