@@ -19,11 +19,13 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1; /* Keep the logo on top */
 }
 
 .logo {
   max-width: 100%;
   height: auto;
+  z-index: 2; /* Ensure the logo is above the embers */
 }
 
 .title {
