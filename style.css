@@ -41,7 +41,7 @@ body {
 /* === Text (Title + Subtitle) === */
 .text-container {
   position: absolute;
-  top: 80%;  /* Adjust this to move text higher/lower */
+  top: 85%;  /* Adjust this to move text higher/lower */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
