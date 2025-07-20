@@ -1,59 +1,76 @@
-const canvas = document.getElementById('emberCanvas');
-const ctx = canvas.getContext('2d');
-
-let embers = [];
+const canvas = document.getElementById("emberCanvas");
+const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-function Ember(x, y) {
-  this.x = x;
-  this.y = y;
-  this.size = Math.random() * 3 + 1;
-  this.speedX = (Math.random() - 0.5) * 4;  // Swirl speed adjustment
-  this.speedY = (Math.random() - 0.5) * 4;  // Swirl speed adjustment
-  this.opacity = Math.random() * 0.5 + 0.2;
-}
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
-function createEmbers(e) {
-  const xPos = e.x;
-  const yPos = e.y;
-  for (let i = 0; i < 5; i++) {
-    embers.push(new Ember(xPos, yPos));
+let mouse = {
+  x: canvas.width / 2,
+  y: canvas.height / 2
+};
+
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+const emberCount = 120;
+const embers = [];
+
+class Ember {
+  constructor() {
+    this.reset(true);
   }
-}
 
-function updateEmbers() {
-  for (let i = 0; i < embers.length; i++) {
-    embers[i].x += embers[i].speedX;
-    embers[i].y += embers[i].speedY;
+  reset(first = false) {
+    this.x = Math.random() * canvas.width;
+    this.y = first ? Math.random() * canvas.height : canvas.height + 10;
+    this.radius = Math.random() * 2 + 1;
+    this.speedY = Math.random() * -1.5 - 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.5;
+    this.alpha = Math.random() * 0.5 + 0.3;
+  }
 
-    embers[i].speedX *= 0.98; // Slow down over time to give a swirling effect
-    embers[i].speedY *= 0.98; // Slow down over time to give a swirling effect
+  update() {
+    // Pull embers slightly toward cursor
+    let dx = mouse.x - this.x;
+    let dy = mouse.y - this.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+    let force = Math.min(100 / dist, 1);
 
-    embers[i].size *= 0.98;
-    embers[i].opacity *= 0.98;
+    this.x += this.speedX + (dx / dist) * force * 0.5;
+    this.y += this.speedY + (dy / dist) * force * 0.02;
 
-    if (embers[i].size <= 0.1 || embers[i].opacity <= 0.05) {
-      embers.splice(i, 1);
-      i--;
+    if (this.y < -10 || this.x < -50 || this.x > canvas.width + 50) {
+      this.reset();
     }
   }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 120, 0, ${this.alpha})`;
+    ctx.shadowColor = "orange";
+    ctx.shadowBlur = 12;
+    ctx.fill();
+  }
 }
 
-function drawEmber(ember) {
-  ctx.beginPath();
-  ctx.arc(ember.x, ember.y, ember.size, 0, Math.PI * 2);
-  ctx.fillStyle = `rgba(255, 165, 0, ${ember.opacity})`;
-  ctx.fill();
+for (let i = 0; i < emberCount; i++) {
+  embers.push(new Ember());
 }
-
-canvas.addEventListener('mousemove', createEmbers);
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  updateEmbers();
-  embers.forEach(drawEmber);
+  embers.forEach((ember) => {
+    ember.update();
+    ember.draw();
+  });
   requestAnimationFrame(animate);
 }
 
