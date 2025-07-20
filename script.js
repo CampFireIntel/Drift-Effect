@@ -34,10 +34,10 @@ class Ember {
     this.speedY = Math.random() * -1.5 - 0.5;
     this.speedX = (Math.random() - 0.5) * 0.5;
     this.alpha = Math.random() * 0.5 + 0.3;
+    this.color = `rgba(255, ${80 + Math.floor(Math.random() * 50)}, 0, ${this.alpha})`;
   }
 
   update() {
-    // Pull embers slightly toward cursor
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
     let dist = Math.sqrt(dx * dx + dy * dy);
@@ -54,24 +54,5 @@ class Ember {
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255, 120, 0, ${this.alpha})`;
-    ctx.shadowColor = "orange";
-    ctx.shadowBlur = 12;
-    ctx.fill();
-  }
-}
-
-for (let i = 0; i < emberCount; i++) {
-  embers.push(new Ember());
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  embers.forEach((ember) => {
-    ember.update();
-    ember.draw();
-  });
-  requestAnimationFrame(animate);
-}
-
-animate();
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = "orang
